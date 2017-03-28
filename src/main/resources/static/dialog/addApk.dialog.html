@@ -1,0 +1,41 @@
+<md-dialog aria-label="添加APK" flex="30">
+    <form ng-cloak >
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>添加APK</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon aria-label="Close dialog">close</md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+
+        <md-dialog-content>
+            <div class="md-dialog-content">
+                <label for="apk-input">
+                    <md-icon >add_circle_outline</md-icon>
+                </label>
+                <input id="apk-input"  type="file" name="name"
+                       style="display: none;" onchange="angular.element(this).scope().fileSelected(this)" />
+                <span>{{apk.name}}</span>
+                <span><md-icon ng-show="progress==100">done</md-icon></span>
+                <md-progress-linear value="{{progress}}" ng-show="progress > 0 && progress < 100"></md-progress-linear>
+
+                <md-input-container flex>
+                    <label>更新日志</label>
+                    <textarea ng-model="updateLog" rows="4" cols="100"></textarea>
+                </md-input-container>
+            </div>
+        </md-dialog-content>
+
+        <md-dialog-actions layout="row">
+            <span flex></span>
+            <md-button ng-click="cancel()">
+                取消
+            </md-button>
+            <md-button ng-click="upload(updateLog)">
+                上传
+            </md-button>
+        </md-dialog-actions>
+    </form>
+</md-dialog>
