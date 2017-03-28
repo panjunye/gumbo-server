@@ -18,8 +18,8 @@ apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 
 jar {
-	baseName = 'updater'
-	version = '0.0.1-SNAPSHOT'
+	baseName = 'gumbo-server'
+	version = '0.1.0'
 }
 
 
