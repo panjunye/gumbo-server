@@ -129,7 +129,7 @@ public class AppService {
             app.setPatch(true);
             appDao.save(app);
         } catch (IOException e) {
-            throw new AppInternalException();
+            throw new AppInternalException(e);
         } finally {
             System.out.println("finally set app patching false");
             app.setPatching(false);
