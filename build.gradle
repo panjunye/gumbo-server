@@ -14,11 +14,17 @@ buildscript {
 }
 
 apply plugin: 'java'
+apply plugin: 'war'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 
 jar {
 	baseName = 'gumbo-server'
+	version = '0.1.0'
+}
+
+war{
+	baseName = "gumbo-server"
 	version = '0.1.0'
 }
 
@@ -35,7 +41,8 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
 	compile('org.springframework.boot:spring-boot-starter-web')
 	runtime('org.springframework.boot:spring-boot-devtools')
-	runtime('mysql:mysql-connector-java:5.1.6')
+	runtime('mysql:mysql-connector-java:5.1.42')
+	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
 
 	compile 'net.dongliu:apk-parser:2.2.0'
 	compile 'commons-codec:commons-codec:1.10'
@@ -50,7 +57,6 @@ dependencies {
 	compile 'org.webjars.npm:angular-material-sidemenu:1.0.2'
 	compile 'org.webjars.bower:angular-ui-router:1.0.0-rc.1'
 	compile 'org.webjars.bower:angular-material-data-table:0.10.10'
-
 
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }

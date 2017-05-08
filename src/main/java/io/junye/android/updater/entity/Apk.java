@@ -1,11 +1,12 @@
-package io.junye.android.updater.bean;
+package io.junye.android.updater.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 
 /**
- * Created by Administrator on 2017/3/17 0017.
+ * Created by Junye on 2017/3/17.
+ *
  */
 @Entity
 public class Apk {
@@ -37,12 +38,12 @@ public class Apk {
     /**
      * 下载地址
      */
+    @Transient
     private String url;
 
-    /**
-     * 文件路径
-     */
-    private String path;
+
+    @JsonIgnore
+    private String relativeUrl;
 
     /**
      * APK md5
@@ -104,8 +105,8 @@ public class Apk {
         return url;
     }
 
-    public void setUrl(String apkUrl) {
-        this.url = apkUrl;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getMd5() {
@@ -114,14 +115,6 @@ public class Apk {
 
     public void setMd5(String md5) {
         this.md5 = md5;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
     }
 
     public Patch getPatch() {
@@ -138,6 +131,14 @@ public class Apk {
 
     public void setSize(Long size) {
         this.size = size;
+    }
+
+    public String getRelativeUrl() {
+        return relativeUrl;
+    }
+
+    public void setRelativeUrl(String relativeUrl) {
+        this.relativeUrl = relativeUrl;
     }
 
     @Override

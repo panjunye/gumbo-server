@@ -1,7 +1,6 @@
 package io.junye.android.updater.rest;
 
-import io.junye.android.updater.bean.App;
-import io.junye.android.updater.service.ApkService;
+import io.junye.android.updater.entity.App;
 import io.junye.android.updater.service.AppService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -9,18 +8,17 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * Created by Administrator on 2017/3/20 0020.
+ * Created by Junye on 2017/3/20.
+ *
  */
 @RestController
 @RequestMapping("api/apps")
 public class AppRestController {
 
-    private final ApkService apkService;
     private final AppService appService;
 
     @Autowired
-    public AppRestController(ApkService apkService, AppService appService) {
-        this.apkService = apkService;
+    public AppRestController(AppService appService) {
         this.appService = appService;
     }
 

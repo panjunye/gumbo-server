@@ -1,9 +1,10 @@
 package io.junye.android.updater.service;
 
-import io.junye.android.updater.bean.Apk;
-import io.junye.android.updater.bean.App;
-import io.junye.android.updater.bean.Patch;
-import io.junye.android.updater.bean.UpdateInfo;
+import io.junye.android.updater.component.FileManager;
+import io.junye.android.updater.entity.Apk;
+import io.junye.android.updater.entity.App;
+import io.junye.android.updater.entity.Patch;
+import io.junye.android.updater.entity.UpdateInfo;
 import io.junye.android.updater.dao.ApkDao;
 import io.junye.android.updater.dao.AppDao;
 import io.junye.android.updater.exception.AppNotFoundException;
@@ -20,10 +21,13 @@ public class UpdateService {
     private final ApkDao apkDao;
     private final AppDao appDao;
 
+    private final FileManager fileManager;
+
     @Autowired
-    public UpdateService(ApkDao apkDao, AppDao appDao) {
+    public UpdateService(ApkDao apkDao, AppDao appDao, FileManager fileManager) {
         this.appDao = appDao;
         this.apkDao = apkDao;
+        this.fileManager = fileManager;
     }
 
     public UpdateInfo checkUpdate(Long versionCode,String appKey){
@@ -45,12 +49,15 @@ public class UpdateService {
         }
 
 
+        FileManager.FileHelper fileHelper = fileManager.build(apk.getRelativeUrl());
+
         info.setUpdate(true);
         info.setVersionName(apk.getVersionName());
         info.setVersionCode(apk.getVersionCode());
         info.setNewMd5(apk.getMd5());
         info.setTargetSize(apk.getSize());
-        info.setApkUrl(apk.getUrl());
+
+        info.setApkUrl(fileHelper.getAbsoluteUrl());
         info.setUpdateLog(apk.getUpdateLog());
 
         Apk oldApk = apkDao.findByAppAndVersionCode(app,versionCode);

@@ -4,7 +4,8 @@ import com.sun.jna.Library;
 import com.sun.jna.Native;
 
 /**
- * Created by Administrator on 2017/3/22 0022.
+ * Created by Junye on 2017/3/22.
+ *
  */
 public interface Bsdiff extends Library {
     Bsdiff INSTANCE = Native.loadLibrary("bsdiff",Bsdiff.class);

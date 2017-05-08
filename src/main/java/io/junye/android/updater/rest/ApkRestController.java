@@ -1,6 +1,6 @@
 package io.junye.android.updater.rest;
 
-import io.junye.android.updater.bean.Apk;
+import io.junye.android.updater.entity.Apk;
 import io.junye.android.updater.exception.AppInternalException;
 import io.junye.android.updater.service.ApkService;
 import org.springframework.beans.factory.annotation.Autowired;

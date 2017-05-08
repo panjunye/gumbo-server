@@ -1,6 +1,6 @@
 package io.junye.android.updater.rest;
 
-import io.junye.android.updater.bean.UpdateInfo;
+import io.junye.android.updater.entity.UpdateInfo;
 import io.junye.android.updater.service.UpdateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

@@ -1,4 +1,4 @@
-package io.junye.android.updater.bean;
+package io.junye.android.updater.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -18,9 +18,11 @@ public class Patch {
 
     private String md5;
 
+    @Transient
     private String url;
 
-    private String path;
+    @JsonIgnore
+    private String relativeUrl;
 
     @OneToOne(mappedBy = "patch")
     @JsonIgnore
@@ -67,11 +69,11 @@ public class Patch {
         this.apk = apk;
     }
 
-    public String getPath() {
-        return path;
+    public String getRelativeUrl() {
+        return relativeUrl;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setRelativeUrl(String relativeUrl) {
+        this.relativeUrl = relativeUrl;
     }
 }

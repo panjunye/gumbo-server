@@ -1,25 +1,23 @@
 package io.junye.android.updater.service;
 
-import io.junye.android.updater.bean.Apk;
-import io.junye.android.updater.bean.App;
-import io.junye.android.updater.bean.Patch;
+import io.junye.android.updater.component.FileManager;
+import io.junye.android.updater.entity.Apk;
+import io.junye.android.updater.entity.App;
+import io.junye.android.updater.entity.Patch;
 import io.junye.android.updater.dao.ApkDao;
 import io.junye.android.updater.dao.AppDao;
 import io.junye.android.updater.exception.AppConflictException;
 import io.junye.android.updater.exception.AppInternalException;
 import io.junye.android.updater.exception.AppNotFoundException;
 import io.junye.android.updater.jna.Bsdiff;
-import io.junye.android.updater.util.AppUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,17 +31,14 @@ public class AppService {
     private final AppDao appDao;
     private final ApkDao apkDao;
 
-    @Value("${app.apk.dir}")
-    private String apkDir;
-
-    @Value("${app.apk.download-base-url}")
-    private String apkDownloadBaseUrl;
+    private final FileManager fileManager;
 
 
     @Autowired
-    public AppService(AppDao appDao, ApkDao apkDao) {
+    public AppService(AppDao appDao, ApkDao apkDao, FileManager fileManager) {
         this.appDao = appDao;
         this.apkDao = apkDao;
+        this.fileManager = fileManager;
     }
 
     public List<App> getAllApps() {
@@ -65,7 +60,7 @@ public class AppService {
 
     public void deleteAppByName(String appName) {
 
-        App app = getAppByName(appName);
+        App app = checkAppExistByName(appName);
 
         appDao.delete(app);
     }
@@ -73,7 +68,12 @@ public class AppService {
 
     public void patchApk(String appName) {
 
-        App app = getAppByName(appName);
+        App app = checkAppExistByName(appName);
+
+        if(app.isPatch()){
+
+            throw new AppConflictException("已经生成增量包");
+        }
 
         if(app.isPatching()){
             throw new AppConflictException("正在生成增量包");
@@ -84,31 +84,42 @@ public class AppService {
         appDao.save(app);
 
 
-        if(app.isPatch()){
-            throw new AppConflictException("已经生成增量包");
-        }
 
         List<Apk> apks = app.getApks();
 
         if(apks.size() <= 0)
             return;
 
-        // 删除以前生成的补丁文件
-        AppUtils.deletePatches(app);
+        // TODO 删除以前生成的补丁文件
 
         // 获取最新的APK
         Apk newApk = apks.get(0);
 
+        String newApkPath = fileManager.build(newApk.getRelativeUrl()).getAbsolutePathString();
+
         try {
             for (int i = 1; i < apks.size(); i++) {
-                Apk apk = apks.get(i);
-                Path patchPath = Paths.get(apkDir,app.getName(),"patches",
-                        app.getPkgName()+apk.getVersionCode()+"_" + newApk.getVersionCode()+".patch");
+
+                Apk oldApk = apks.get(i);
+
+                String oldApkPath = fileManager.build(oldApk.getRelativeUrl()).getAbsolutePathString();
+
+                String[] more = new String[]{"patches",app.getPkgName()+oldApk.getVersionName()+"_" + newApk.getVersionCode()+".patch"};
+
+                FileManager.FileHelper patchFileHelper = fileManager.build(more);
+
+                Path patchPath = patchFileHelper.getAbsolutePath();
+
                 if(patchPath.getParent() != null){
-                        Files.createDirectories(patchPath.getParent());
+                    Files.createDirectories(patchPath.getParent());
                 }
 
-                int result = Bsdiff.INSTANCE.diff(apk.getPath(),newApk.getPath(),patchPath.toString());
+
+
+                int result = Bsdiff.INSTANCE.diff(oldApkPath,newApkPath,patchPath.toString());
+
+
+
                 if(result == 0){
                     String md5;
                     try(InputStream is = Files.newInputStream(patchPath)){
@@ -116,12 +127,12 @@ public class AppService {
                     }
 
                     Patch patch = new Patch();
-                    patch.setPath(patchPath.toString());
+                    patch.setRelativeUrl(patch.getRelativeUrl());
                     patch.setMd5(md5);
                     patch.setSize(patchPath.toFile().length());
-                    patch.setUrl(apkDownloadBaseUrl +"/" + app.getName() +  "/patches/" + patchPath.getFileName());
-                    apk.setPatch(patch);
-                    apkDao.save(apk);
+                    patch.setRelativeUrl(patchFileHelper.getRelativeUrl());
+                    oldApk.setPatch(patch);
+                    apkDao.save(oldApk);
                 }else{
                     throw new IOException();
                 }
@@ -138,11 +149,15 @@ public class AppService {
     }
 
 
+    /**
+     *
+     * @return 返回唯一APP KEY
+     */
     private static String newAppKey(){
         return UUID.randomUUID().toString().replace("-","");
     }
 
-    private App getAppByName(String appName){
+    private App checkAppExistByName(String appName){
 
         App app = appDao.findByName(appName);
         if(app == null){

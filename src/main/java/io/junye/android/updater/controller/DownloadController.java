@@ -1,13 +1,15 @@
 package io.junye.android.updater.controller;
 
-import io.junye.android.updater.service.DownloadService;
+import io.junye.android.updater.component.FileManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.HandlerMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,7 +19,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 /**
  * Created by Administrator on 2017/3/21 0021.
@@ -27,25 +28,38 @@ import java.nio.file.Paths;
 @Controller
 @RequestMapping("download")
 public class DownloadController {
-    private final DownloadService downloadService;
+
+    private final FileManager fileManager;
 
     @Autowired
-    public DownloadController(DownloadService downloadService) {
-        this.downloadService = downloadService;
+    public DownloadController(FileManager fileManager) {
+
+        this.fileManager = fileManager;
+
     }
 
-    @GetMapping(value = "**",produces = MediaType.APPLICATION_OCTET_STREAM_VALUE )
-    @ResponseBody
-    public FileSystemResource downloadFile(HttpServletRequest request, HttpServletResponse response){
-        String uri = request.getRequestURI();
-        String filePath = uri.substring(uri.indexOf("/",1)).replace("/","\\");
+    @GetMapping(value = "**")
+    public void downloadFile(HttpServletRequest request, HttpServletResponse response){
+
+        String relativeUri = request.getAttribute(HandlerMapping.PATH_WITHIN_HANDLER_MAPPING_ATTRIBUTE).toString();
+
+        relativeUri = relativeUri.replace("/download","");
 
         try {
-            filePath = URLDecoder.decode(filePath,"UTF-8");
+            relativeUri = URLDecoder.decode(relativeUri,"UTF-8");
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException("下载文件错误");
         }
-        Path path = Paths.get(filePath);
+
+
+        System.out.println("relativeUri:" + relativeUri);
+
+        FileManager.FileHelper fileHelper = fileManager.build(relativeUri);
+
+
+        Path path = fileHelper.getAbsolutePath();
+
+        File file = path.toFile();
 
         String mimeType;
 
@@ -54,11 +68,18 @@ public class DownloadController {
         } catch (IOException e) {
             throw new RuntimeException("下载文件错误");
         }
-        File file = downloadService.getFile(filePath);
-        response.setContentType(mimeType);
-        response.setHeader("Content-Disposition", "attachment; filename=" + file.getName());
-        return new FileSystemResource(downloadService.getFile(filePath));
 
+
+        response.setContentType(mimeType);
+
+        response.addHeader("Content-Disposition", "attachment; filename=" + file.getName());
+
+        try{
+            Files.copy(path,response.getOutputStream());
+            response.getOutputStream().flush();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
 

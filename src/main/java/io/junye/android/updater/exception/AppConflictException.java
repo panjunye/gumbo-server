@@ -1,7 +1,8 @@
 package io.junye.android.updater.exception;
 
 /**
- * Created by Administrator on 2017/3/20 0020.
+ * Created by Junye on 2017/3/20.
+ *
  */
 public class AppConflictException extends RuntimeException{
 
