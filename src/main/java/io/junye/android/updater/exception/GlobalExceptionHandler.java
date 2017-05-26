@@ -1,5 +1,6 @@
 package io.junye.android.updater.exception;
 
+import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -31,6 +32,7 @@ public class GlobalExceptionHandler {
     AppError handleInternalException(HttpServletRequest req, Exception ex) {
         ex.printStackTrace();
         return new AppError(ex.getMessage());
+
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

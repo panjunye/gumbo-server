@@ -58,6 +58,7 @@ public class UpdateService {
         info.setTargetSize(apk.getSize());
 
         info.setApkUrl(fileHelper.getAbsoluteUrl());
+
         info.setUpdateLog(apk.getUpdateLog());
 
         Apk oldApk = apkDao.findByAppAndVersionCode(app,versionCode);

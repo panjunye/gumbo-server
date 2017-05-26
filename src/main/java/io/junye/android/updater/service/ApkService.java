@@ -29,8 +29,8 @@ import java.util.List;
 @Service
 public class ApkService {
 
-    public static final String PREFIX = "APK";
-    public static final String SUFFIX = ".tmp";
+    private static final String PREFIX = "APK";
+    private static final String SUFFIX = ".tmp";
 
     private final ApkDao apkDao;
     private final AppDao appDao;
@@ -56,18 +56,16 @@ public class ApkService {
 
         ApkMeta apkMeta;
 
+        // 读取APK包的信息，获得包名、版本号、版本名
         try(ApkFile apkFile = new ApkFile(tempApkPath.toFile())){
             apkMeta = apkFile.getApkMeta();
         }
-
-
 
         String pkgName = apkMeta.getPackageName();
 
         Long   versionCode = apkMeta.getVersionCode();
 
         String versionName = apkMeta.getVersionName();
-
 
         if(apkDao.findByAppAndVersionCode(app,versionCode) != null){
             throw new AppConflictException(String.format("版本 %s 已存在",versionCode.toString()));

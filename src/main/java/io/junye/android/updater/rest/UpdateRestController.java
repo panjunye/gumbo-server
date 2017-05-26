@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotNull;
 
 /**
- * Created by Administrator on 2017/3/14 0014.
+ * Created by Junye on 2017/3/14.
  */
 @RestController
 @RequestMapping("api")
@@ -25,7 +25,7 @@ public class UpdateRestController {
     public UpdateInfo checkUpdate(
             @NotNull @RequestParam("versionCode") Long versionCode,
             @NotNull @RequestParam("appKey") String appKey){
-        System.out.println("versionCode:" + versionCode);
+
         UpdateInfo info =  updateService.checkUpdate(versionCode,appKey);
         System.out.println(info);
         return info;
