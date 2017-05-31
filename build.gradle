@@ -42,7 +42,7 @@ dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
 	runtime('org.springframework.boot:spring-boot-devtools')
 	runtime('mysql:mysql-connector-java:5.1.42')
-	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
+	compile("org.springframework.boot:spring-boot-starter-tomcat")
 
 	compile 'net.dongliu:apk-parser:2.2.0'
 	compile 'commons-codec:commons-codec:1.10'

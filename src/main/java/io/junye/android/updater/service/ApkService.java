@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -102,7 +103,7 @@ public class ApkService {
         Apk apk = new Apk();
 
         // 获取APK对应的相对URL地址
-        String relativeUrl = fileHelper.getRelativeUrl();
+        String fileId = fileHelper.getFileId();
 
         apk.setVersionName(versionName);
 
@@ -114,7 +115,7 @@ public class ApkService {
 
         apk.setUpdateLog(updateLog);
 
-        apk.setRelativeUrl(relativeUrl);
+        apk.setFileId(fileId);
 
         apk.setApp(app);
 
@@ -133,7 +134,7 @@ public class ApkService {
 
         List<Apk> apks =  app.getApks();
         apks.forEach(apk -> {
-            FileManager.FileHelper fileHelper = fileManager.build(apk.getRelativeUrl());
+            FileManager.FileHelper fileHelper = fileManager.build(apk.getFileId());
             apk.setUrl(fileHelper.getAbsoluteUrl());
             System.out.println(apk.getUrl());
         });
@@ -154,7 +155,10 @@ public class ApkService {
             app.setPatch(false);
         }
         appDao.save(app);
+        File file = fileManager.build(apk.getFileId()).getFile();
         apkDao.delete(apk);
+        // 删除文件
+        file.delete();
     }
 
 

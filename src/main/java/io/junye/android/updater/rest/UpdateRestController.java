@@ -26,9 +26,7 @@ public class UpdateRestController {
             @NotNull @RequestParam("versionCode") Long versionCode,
             @NotNull @RequestParam("appKey") String appKey){
 
-        UpdateInfo info =  updateService.checkUpdate(versionCode,appKey);
-        System.out.println(info);
-        return info;
+        return updateService.checkUpdate(versionCode,appKey);
     }
 
 }

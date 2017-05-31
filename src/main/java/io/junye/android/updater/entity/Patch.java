@@ -22,7 +22,7 @@ public class Patch {
     private String url;
 
     @JsonIgnore
-    private String relativeUrl;
+    private String fileId;
 
     @OneToOne(mappedBy = "patch")
     @JsonIgnore
@@ -69,11 +69,23 @@ public class Patch {
         this.apk = apk;
     }
 
-    public String getRelativeUrl() {
-        return relativeUrl;
+    public String getFileId() {
+        return fileId;
     }
 
-    public void setRelativeUrl(String relativeUrl) {
-        this.relativeUrl = relativeUrl;
+    public void setFileId(String fileId) {
+        this.fileId = fileId;
+    }
+
+    @Override
+    public String toString() {
+        return "Patch{" +
+                "id=" + id +
+                ", size=" + size +
+                ", md5='" + md5 + '\'' +
+                ", url='" + url + '\'' +
+                ", fileId='" + fileId + '\'' +
+                ", apk=" + apk +
+                '}';
     }
 }

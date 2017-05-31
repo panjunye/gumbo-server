@@ -43,7 +43,7 @@ public class Apk {
 
 
     @JsonIgnore
-    private String relativeUrl;
+    private String fileId;
 
     /**
      * APK md5
@@ -133,12 +133,13 @@ public class Apk {
         this.size = size;
     }
 
-    public String getRelativeUrl() {
-        return relativeUrl;
+
+    public String getFileId() {
+        return fileId;
     }
 
-    public void setRelativeUrl(String relativeUrl) {
-        this.relativeUrl = relativeUrl;
+    public void setFileId(String fileId) {
+        this.fileId = fileId;
     }
 
     @Override
@@ -154,5 +155,21 @@ public class Apk {
     @Override
     public int hashCode() {
         return versionCode != null ? versionCode.hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return "Apk{" +
+                "id=" + id +
+                ", app=" + app +
+                ", versionCode=" + versionCode +
+                ", versionName='" + versionName + '\'' +
+                ", updateLog='" + updateLog + '\'' +
+                ", url='" + url + '\'' +
+                ", fileId='" + fileId + '\'' +
+                ", md5='" + md5 + '\'' +
+                ", size=" + size +
+                ", patch=" + patch +
+                '}';
     }
 }

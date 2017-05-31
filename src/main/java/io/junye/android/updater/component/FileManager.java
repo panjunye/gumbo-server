@@ -3,9 +3,9 @@ package io.junye.android.updater.component;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
-import java.util.Arrays;
 
 /**
  * Created by junye on 5/8/17.
@@ -24,11 +24,16 @@ public class FileManager {
         return new FileHelper(more);
     }
 
-    public FileHelper build(String relativeUrl){
-        if(relativeUrl.startsWith("/")){
-            relativeUrl = relativeUrl.substring(1);
+    /**
+     *
+     * @param fileId 文件的id
+     * @return 返回FileHelper实例
+     */
+    public FileHelper build(String fileId){
+        if(fileId.startsWith("/")){
+            fileId = fileId.substring(1);
         }
-        String[] more = relativeUrl.split("/");
+        String[] more = fileId.split("/");
         return build(more);
     }
 
@@ -42,7 +47,10 @@ public class FileManager {
 
         public Path getAbsolutePath(){
             return FileSystems.getDefault().getPath(fileBaseDir,more);
+        }
 
+        public File getFile(){
+            return getAbsolutePath().toFile();
         }
 
         public String getAbsolutePathString(){
@@ -51,10 +59,10 @@ public class FileManager {
 
         public String getAbsoluteUrl(){
 
-            return downloadBaseUrl + getRelativeUrl();
+            return downloadBaseUrl + getFileId();
         }
 
-        public String getRelativeUrl(){
+        public String getFileId(){
             StringBuilder sb = new StringBuilder();
             for(String s : more){
                 sb.append("/").append(s);

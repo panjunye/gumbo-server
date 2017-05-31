@@ -79,32 +79,33 @@ public class AppService {
             throw new AppConflictException("正在生成增量包");
         }
 
-        app.setPatching(true);
-
-        appDao.save(app);
-
-
 
         List<Apk> apks = app.getApks();
 
         if(apks.size() <= 0)
             return;
 
+
+
+        app.setPatching(true);
+
+        appDao.save(app);
+
         // TODO 删除以前生成的补丁文件
 
-        // 获取最新的APK
+        // 提出最新的APK
         Apk newApk = apks.get(0);
 
-        String newApkPath = fileManager.build(newApk.getRelativeUrl()).getAbsolutePathString();
+        String newApkPath = fileManager.build(newApk.getFileId()).getAbsolutePathString();
 
         try {
             for (int i = 1; i < apks.size(); i++) {
 
                 Apk oldApk = apks.get(i);
 
-                String oldApkPath = fileManager.build(oldApk.getRelativeUrl()).getAbsolutePathString();
+                String oldApkPath = fileManager.build(oldApk.getFileId()).getAbsolutePathString();
 
-                String[] more = new String[]{"patches",app.getPkgName()+oldApk.getVersionName()+"_" + newApk.getVersionCode()+".patch"};
+                String[] more = new String[]{app.getPkgName(),"patches",app.getPkgName()+oldApk.getVersionName()+"-" + newApk.getVersionName()+".patch"};
 
                 FileManager.FileHelper patchFileHelper = fileManager.build(more);
 
@@ -114,11 +115,7 @@ public class AppService {
                     Files.createDirectories(patchPath.getParent());
                 }
 
-
-
                 int result = Bsdiff.INSTANCE.diff(oldApkPath,newApkPath,patchPath.toString());
-
-
 
                 if(result == 0){
                     String md5;
@@ -127,10 +124,9 @@ public class AppService {
                     }
 
                     Patch patch = new Patch();
-                    patch.setRelativeUrl(patch.getRelativeUrl());
                     patch.setMd5(md5);
                     patch.setSize(patchPath.toFile().length());
-                    patch.setRelativeUrl(patchFileHelper.getRelativeUrl());
+                    patch.setFileId(patchFileHelper.getFileId());
                     oldApk.setPatch(patch);
                     apkDao.save(oldApk);
                 }else{
