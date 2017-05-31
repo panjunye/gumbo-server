@@ -20,12 +20,12 @@ apply plugin: 'org.springframework.boot'
 
 jar {
 	baseName = 'gumbo-server'
-	version = '0.1.0'
+	version = '0.9'
 }
 
 war{
 	baseName = "gumbo-server"
-	version = '0.1.0'
+	version = '0.9'
 }
 
 
