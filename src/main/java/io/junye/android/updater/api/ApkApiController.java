@@ -1,4 +1,4 @@
-package io.junye.android.updater.rest;
+package io.junye.android.updater.api;
 
 import io.junye.android.updater.entity.Apk;
 import io.junye.android.updater.exception.AppInternalException;
@@ -16,13 +16,13 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("api/apps/{appName}/apks")
-public class ApkRestController {
+public class ApkApiController {
 
     private final ApkService apkService;
 
 
     @Autowired
-    public ApkRestController(ApkService apkService) {
+    public ApkApiController(ApkService apkService) {
         this.apkService = apkService;
     }
 

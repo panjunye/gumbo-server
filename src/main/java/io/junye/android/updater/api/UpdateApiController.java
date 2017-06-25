@@ -1,4 +1,4 @@
-package io.junye.android.updater.rest;
+package io.junye.android.updater.api;
 
 import io.junye.android.updater.entity.UpdateInfo;
 import io.junye.android.updater.service.UpdateService;
@@ -12,12 +12,12 @@ import javax.validation.constraints.NotNull;
  */
 @RestController
 @RequestMapping("api")
-public class UpdateRestController {
+public class UpdateApiController {
 
     private final UpdateService updateService;
 
     @Autowired
-    public UpdateRestController(UpdateService updateService) {
+    public UpdateApiController(UpdateService updateService) {
         this.updateService = updateService;
     }
 

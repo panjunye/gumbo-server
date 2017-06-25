@@ -1,4 +1,4 @@
-package io.junye.android.updater.rest;
+package io.junye.android.updater.api;
 
 import io.junye.android.updater.entity.App;
 import io.junye.android.updater.service.AppService;
@@ -13,12 +13,12 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("api/apps")
-public class AppRestController {
+public class AppApiController {
 
     private final AppService appService;
 
     @Autowired
-    public AppRestController(AppService appService) {
+    public AppApiController(AppService appService) {
         this.appService = appService;
     }
 
