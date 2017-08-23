@@ -13,12 +13,12 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("api/apps")
-public class AppApiController {
+public class AppApi {
 
     private final AppService appService;
 
     @Autowired
-    public AppApiController(AppService appService) {
+    public AppApi(AppService appService) {
         this.appService = appService;
     }
 

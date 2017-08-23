@@ -5,7 +5,7 @@ import io.junye.android.updater.dao.PatchDao;
 import io.junye.android.updater.entity.Apk;
 import io.junye.android.updater.entity.App;
 import io.junye.android.updater.entity.Patch;
-import io.junye.android.updater.entity.UpdateInfo;
+import io.junye.android.updater.pojo.UpdateInfo;
 import io.junye.android.updater.dao.ApkDao;
 import io.junye.android.updater.dao.AppDao;
 import io.junye.android.updater.exception.AppNotFoundException;
@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.beans.Transient;
 import java.io.File;
 
 /**

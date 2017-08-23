@@ -16,13 +16,13 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("api/apps/{appName}/apks")
-public class ApkApiController {
+public class ApkApi {
 
     private final ApkService apkService;
 
 
     @Autowired
-    public ApkApiController(ApkService apkService) {
+    public ApkApi(ApkService apkService) {
         this.apkService = apkService;
     }
 

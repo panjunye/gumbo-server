@@ -71,5 +71,12 @@ public class FileManager {
         }
     }
 
+    public File getTempDir(){
+        File tmp =  new File(fileBaseDir,"tmp");
+        if(!tmp.exists()){
+            tmp.mkdirs();
+        }
+        return tmp;
+    }
 
 }

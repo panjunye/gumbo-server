@@ -1,14 +1,14 @@
 #!/bin/bash
-GUMBO_HOME=$(dirname $(dirname $(readlink -f "$0")))
-echo $GUMBO_HOME
+SERVER_HOME=$(dirname $(dirname $(readlink -f "$0")))
+echo $SERVER_HOME
 SERVICE_NAME="gumbod"
-JAR_NAME=$GUMBO_HOME/gumbo-server.jar
-LOGS=$GUMBO_HOME/logs
-TMP=$GUMBO_HOME/tmp
-PID=$TMP/gumbo.pid
-DOWNLOAD=$GUMBO_HOME/download
-CONF=$GUMBO_HOME/conf
-JAVA_OPTS=--spring.config.location=$GUMBO_HOME/conf/application.properties
+JAR_NAME=$SERVER_HOME/server.jar
+LOGS=$SERVER_HOME/logs
+TMP=$SERVER_HOME/tmp
+PID=$TMP/server.pid
+DOWNLOAD=$SERVER_HOME/download
+CONF=$SERVER_HOME/conf
+JAVA_OPTS=--spring.config.location=$SERVER_HOME/conf/application.properties
 
 mkdir -p $LOGS
 mkdir -p $TMP
@@ -16,7 +16,7 @@ mkdir -p $DOWNLOAD
 
 case "$1" in
 start)
-	nohup java -jar $JAR_NAME $JAVA_OPTS > $LOGS/gumbo.logs 2>&1 &
+	nohup java -jar $JAR_NAME $JAVA_OPTS > $LOGS/server.logs 2>&1 &
 	echo $!>$PID
 	echo "$SERVICE_NAME started."
 ;;

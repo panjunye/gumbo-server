@@ -1,4 +1,4 @@
-package io.junye.android.updater.entity;
+package io.junye.android.updater.pojo;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;

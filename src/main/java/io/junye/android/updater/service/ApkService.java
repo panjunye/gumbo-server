@@ -51,7 +51,7 @@ public class ApkService {
         /**
          * 创建临时文件保存上传的apk文件
          */
-        Path tempApkPath = Files.createTempFile(PREFIX,SUFFIX);
+        Path tempApkPath = Files.createTempFile(fileManager.getTempDir().toPath(),PREFIX,SUFFIX);
         tempApkPath.toFile().deleteOnExit();
         Files.copy(multiPartApk.getInputStream(),tempApkPath, StandardCopyOption.REPLACE_EXISTING);
 
