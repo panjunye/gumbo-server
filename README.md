@@ -1,10 +1,13 @@
-# Gumbo,一个Android应用的增量更新服务器
-## 使用方法
+## Gumbo,一个Android应用的增量更新服务器
+### 使用方法
 下载 gumbo-server.tar.gz
+
+```
 $ tar xzvf gumbo-server.tar.gz
 $ cd gumbo-server
 $ vim conf/application.properties
-## 设置数据库信息
+```
+#### 设置数据库信息
 ```
 spring.datasource.url=jdbc:mysql://数据库ip地址/database
 spring.datasource.username= #数据库用户名
