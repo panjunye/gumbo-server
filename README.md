@@ -1,4 +1,4 @@
-## Gumbo,一个Android应用的增量更新服务器
+## 一个Android应用的增量更新服务器
 ### 使用方法
 下载 gumbo-server.tar.gz
 
