@@ -16,8 +16,10 @@ server.port=8080  # 端口
 app.apk.dir=./gumbo-server/download # apk存放的目录
 app.apk.download-base-url=http://服务器IP地址:端口/download
 ```
+启动服务
+```
 $ cd bin;
 $ sh ./gumbod.sh start # 启动服务
-
+```
 
 
